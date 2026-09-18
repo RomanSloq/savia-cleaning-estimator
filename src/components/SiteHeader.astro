@@ -1,0 +1,41 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="Savia — на главную">
+      <span class="brand-name">Savia</span>
+      <span class="brand-note">профессиональный клининг · Пермь</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Основная навигация">
+      <a href="#services">Услуги</a>
+      <a href="#process">Как работаем</a>
+      <a href="#archive">Примеры</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <a class="button button-small header-cta" href="#quote">Получить расчёт</a>
+
+    <details class="mobile-nav">
+      <summary>Меню</summary>
+      <nav aria-label="Мобильная навигация">
+        <a href="#services">Услуги</a>
+        <a href="#process">Как работаем</a>
+        <a href="#archive">Примеры</a>
+        <a href="#quote">Получить расчёт</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>(".mobile-nav");
+  menu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => { menu.open = false; });
+  });
+  menu?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+</script>

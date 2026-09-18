@@ -1,0 +1,139 @@
+<form class="quote-form" id="quote-form" aria-describedby="form-demo-note" novalidate>
+  <p class="form-demo-note" id="form-demo-note">Демонстрационная форма: данные никуда не отправляются. Не вводите реальные персональные данные.</p>
+  <p class="form-guidance">Заполните то, что уже знаете. Все поля в демоверсии необязательные.</p>
+  <div class="form-step">
+    <div class="form-step-heading">
+      <span>01</span>
+      <h3>Что нужно убрать?</h3>
+    </div>
+
+    <fieldset class="field field-full">
+      <legend>Вы обращаетесь как</legend>
+      <div class="choice-row">
+        <label class="choice">
+          <input type="radio" name="customerType" value="private" />
+          <span>Частный клиент</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="customerType" value="business" />
+          <span>Организация</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="property-type">Тип объекта</label>
+      <select id="property-type" name="propertyType">
+        <option value="">Выберите вариант</option>
+        <option>Квартира</option>
+        <option>Дом</option>
+        <option>Офис</option>
+        <option>Производственное помещение</option>
+        <option>Склад</option>
+        <option>Другое</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="cleaning-type">Вид уборки</label>
+      <select id="cleaning-type" name="cleaningType">
+        <option value="">Выберите вариант</option>
+        <option>Регулярная уборка</option>
+        <option>Ежедневная уборка</option>
+        <option>Генеральная уборка</option>
+        <option>После строительства или ремонта</option>
+        <option>Мойка окон</option>
+        <option>Пока не знаю</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="area">Примерная площадь, м²</label>
+      <input id="area" name="area" type="number" min="1" inputmode="numeric" placeholder="Например, 65" />
+    </div>
+
+    <fieldset class="field">
+      <legend>Как часто нужна уборка</legend>
+      <div class="choice-row choice-row-compact">
+        <label class="choice">
+          <input type="radio" name="frequency" value="once" />
+          <span>Разово</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="frequency" value="recurring" />
+          <span>Регулярно</span>
+        </label>
+      </div>
+    </fieldset>
+  </div>
+
+  <details class="form-details">
+    <summary><span>02</span> Что важно учесть? <small>Необязательно</small></summary>
+    <div class="form-step">
+
+    <label class="check field-full">
+      <input type="checkbox" name="windows" />
+      <span>
+        <strong>Нужна мойка окон</strong>
+        <small>Учтём её при обсуждении состава работ</small>
+      </span>
+    </label>
+
+    <div class="field">
+      <label for="preferred-date">Желаемая дата</label>
+      <input id="preferred-date" name="preferredDate" type="date" />
+    </div>
+
+    <div class="field field-full">
+      <label for="details">Дополнительные задачи и комментарий</label>
+      <textarea id="details" name="details" rows="4" placeholder="Расскажите о состоянии помещения или важных деталях"></textarea>
+    </div>
+    </div>
+  </details>
+
+  <div class="form-step">
+    <div class="form-step-heading">
+      <span>03</span>
+      <h3>Как с вами связаться?</h3>
+    </div>
+
+    <div class="field">
+      <label for="name">Как к вам обращаться</label>
+      <input id="name" name="name" type="text" autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="phone">Телефон для связи</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7" />
+    </div>
+  </div>
+
+  <div class="form-submit">
+    <p>
+      Стоимость зависит от площади, состояния помещения, состава работ и регулярности. Адрес на этом этапе не нужен.
+    </p>
+    <button class="button" type="submit" disabled>Получить индивидуальный расчёт</button>
+  </div>
+
+  <noscript>Для проверки демоформы включите JavaScript. Отправка данных не подключена.</noscript>
+  <p class="form-status" id="form-status" role="status" tabindex="-1" hidden></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#quote-form");
+  const status = document.querySelector<HTMLParagraphElement>("#form-status");
+  const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    // Stage 1 only: never imply that a lead was delivered before a real handler exists.
+    if (status) {
+      status.hidden = false;
+      status.textContent =
+        "Это демонстрационная версия: заявка не отправлена. Подключение формы будет отдельным этапом.";
+      status.focus();
+    }
+  });
+  if (submit) submit.disabled = false;
+</script>

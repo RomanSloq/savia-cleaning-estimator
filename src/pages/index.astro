@@ -1,0 +1,198 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import ArchiveGallery from "../components/ArchiveGallery.astro";
+
+const privateServices = [
+  "Регулярная уборка",
+  "Генеральная уборка",
+  "После строительства и ремонта",
+  "Мойка окон",
+];
+
+const businessServices = [
+  "Регулярное и ежедневное обслуживание",
+  "Генеральная уборка",
+  "После строительства и ремонта",
+  "Мойка окон — когда это входит в задачу",
+];
+
+const processSteps = [
+  ["Заявка", "Вы рассказываете об объекте и нужном формате уборки."],
+  ["Обсуждение", "Уточняем состояние помещения, состав работ и важные детали."],
+  ["Расчёт", "Определяем объём и называем индивидуальную стоимость."],
+  ["Согласование", "Подбираем удобное время и команду под конкретную задачу."],
+  ["Уборка", "Выполняем согласованный объём и принимаем результат вместе с вами."],
+];
+---
+
+<BaseLayout
+  title="Профессиональный клининг в Перми — Savia"
+  description="Регулярная и генеральная уборка квартир, домов, офисов и других помещений в Перми. Индивидуальный расчёт под ваш объект."
+>
+  <SiteHeader />
+
+  <main id="main-content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Клининг в Перми</p>
+          <h1 id="hero-title">Уборка,<br />к которой<br /><em>возвращаются</em></h1>
+          <p class="hero-lead">
+            Помогаем поддерживать чистоту в квартирах, офисах и других помещениях. Разовые работы и регулярное обслуживание — с индивидуальным расчётом под ваш объект.
+          </p>
+          <a class="button" href="#quote">Получить индивидуальный расчёт</a>
+        </div>
+
+        <figure class="hero-visual">
+          <img src="/images/concepts/warm-living-room.png" width="1448" height="1086" alt="Светлая гостиная с диваном, растением и деревянным столиком — сгенерированный интерьерный концепт" fetchpriority="high" decoding="async" />
+          <figcaption class="visual-caption">Визуальный концепт · сгенерировано, не фотография выполненной работы</figcaption>
+        </figure>
+
+        <ul class="hero-facts" aria-label="Главное о работе">
+          <li><strong>Индивидуальный подход</strong></li>
+          <li><strong>Дом и бизнес</strong></li>
+          <li><strong>Профессиональное оборудование</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="trust section" aria-labelledby="trust-title">
+      <div class="container trust-grid">
+        <div class="trust-statement">
+          <h2 id="trust-title">Работаем так, чтобы к нам <em>возвращались.</em></h2>
+        </div>
+        <div class="trust-details">
+          <p>
+            У каждого помещения свой ритм и свои задачи. Поэтому состав работ, график и команда согласуются индивидуально — без безличного конвейера.
+          </p>
+          <p class="trust-personal">Небольшая команда учитывает детали объекта и согласует удобный график.</p>
+          <p class="trust-context">Квартиры, дома, офисы, производства и склады. Разовая уборка или регулярное обслуживание.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="services section section-dark" id="services" aria-labelledby="services-title">
+      <div class="container services-inner">
+        <div class="section-heading services-heading">
+          <div>
+            <p class="eyebrow">Услуги</p>
+            <h2 id="services-title">Чистота для дома<br />и рабочих помещений</h2>
+          </div>
+          <div class="services-support">
+            <p>
+              От одной сложной уборки до привычного регулярного графика. Объём работ определяем по реальной задаче, а не по готовому пакету.
+            </p>
+            <p class="services-note">Для каждой задачи подбираем оборудование и средства с учётом особенностей помещения.</p>
+          </div>
+        </div>
+
+        <div class="service-columns">
+          <article class="service-group">
+            <figure class="service-photo service-photo-home">
+              <img src="/images/concepts/bathroom.png" width="1448" height="1086" alt="Светлая ванная комната с душевой кабиной — сгенерированный концепт, не реальный объект клиента" loading="lazy" decoding="async" />
+            </figure>
+            <div class="service-content">
+            <div class="service-meta">
+              <p>Для частных клиентов</p>
+            </div>
+            <h3>Квартиры и дома</h3>
+            <ul>
+              {privateServices.map((service) => <li>{service}</li>)}
+            </ul>
+            <a class="service-link" href="#quote"><span>Обсудить уборку дома</span><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+            </div>
+          </article>
+
+          <article class="service-group">
+            <figure class="service-photo service-photo-business">
+              <img src="/images/concepts/office.png" width="1448" height="1086" alt="Светлый офис с переговорным столом и растениями — сгенерированный концепт, не реальный объект клиента" loading="lazy" decoding="async" />
+            </figure>
+            <div class="service-content">
+            <div class="service-meta">
+              <p>Для организаций</p>
+            </div>
+            <h3>Офисы, производства и склады</h3>
+            <ul>
+              {businessServices.map((service) => <li>{service}</li>)}
+            </ul>
+            <a class="service-link" href="#quote"><span>Обсудить уборку для бизнеса</span><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="process section" id="process" aria-labelledby="process-title">
+      <div class="container process-grid">
+        <div class="process-intro">
+          <h2 id="process-title">Сначала уточняем задачу — затем называем стоимость</h2>
+          <aside class="price-note">
+            <span>Почему без прайса</span>
+            <p>
+              Стоимость рассчитывается индивидуально: она зависит от площади, состояния помещения, состава работ, регулярности и дополнительных задач.
+            </p>
+          </aside>
+        </div>
+
+        <ol class="process-list">
+          {processSteps.map(([title, text], index) => (
+            <li>
+              <span class="process-number">{String(index + 1).padStart(2, "0")}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="archive section" id="archive" aria-labelledby="archive-title">
+      <div class="container archive-grid">
+        <div class="archive-copy">
+          <h2 id="archive-title">Примеры результата</h2>
+          <p class="archive-note">Временные изображения для визуального прототипа</p>
+        </div>
+
+        <ArchiveGallery />
+      </div>
+    </section>
+
+    <section class="quote section" id="quote" aria-labelledby="quote-title">
+      <div class="container quote-grid">
+        <div class="quote-intro">
+          <h2 id="quote-title">Расскажите об объекте — подготовим индивидуальный расчёт</h2>
+          <p>
+            Несколько ориентиров помогут понять задачу до разговора. Можно пропустить то, что пока неизвестно: адрес на первом шаге не нужен.
+          </p>
+        </div>
+        <QuoteForm />
+      </div>
+    </section>
+
+    <section class="final-cta" id="contacts" aria-labelledby="final-title">
+      <div class="container final-cta-inner">
+        <div>
+          <h2 id="final-title">Нужна уборка для дома или бизнеса?</h2>
+        </div>
+        <div>
+          <p>Расскажите об объекте — обсудим задачу и подберём подходящий формат работы.</p>
+          <a class="button button-light" href="#quote">Описать объект</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Savia</strong>
+        <span>Профессиональный клининг · Пермь</span>
+      </div>
+      <p>Контактные данные готовятся к публикации после подтверждения.</p>
+      <a href="#top">Наверх <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5m-6 6 6-6 6 6" /></svg></a>
+    </div>
+  </footer>
+</BaseLayout>
