@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import ArchiveGallery from "../components/ArchiveGallery.astro";
+import PriceCalculator from "../components/PriceCalculator.astro";
 
 const privateServices = [
   "Регулярная уборка",
@@ -42,7 +43,7 @@ const processSteps = [
           <p class="hero-lead">
             Помогаем поддерживать чистоту в квартирах, офисах и других помещениях. Разовые работы и регулярное обслуживание — с индивидуальным расчётом под ваш объект.
           </p>
-          <a class="button" href="#quote">Получить индивидуальный расчёт</a>
+          <a class="button" href="#calculator">Получить индивидуальный расчёт</a>
         </div>
 
         <figure class="hero-visual">
@@ -130,7 +131,7 @@ const processSteps = [
         <div class="process-intro">
           <h2 id="process-title">Сначала уточняем задачу — затем называем стоимость</h2>
           <aside class="price-note">
-            <span>Почему без прайса</span>
+            <span>Как формируется стоимость</span>
             <p>
               Стоимость рассчитывается индивидуально: она зависит от площади, состояния помещения, состава работ, регулярности и дополнительных задач.
             </p>
@@ -148,6 +149,8 @@ const processSteps = [
         </ol>
       </div>
     </section>
+
+    <PriceCalculator />
 
     <section class="archive section" id="archive" aria-labelledby="archive-title">
       <div class="container archive-grid">

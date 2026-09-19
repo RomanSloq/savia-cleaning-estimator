@@ -1,0 +1,192 @@
+<section class="calculator section" id="calculator" aria-labelledby="calculator-title">
+  <div class="container">
+    <div class="calculator-intro">
+      <h2 id="calculator-title">Предварительный расчёт уборки</h2>
+      <p>Выберите основные параметры — покажем ориентир по стоимости для вашей задачи.</p>
+    </div>
+
+    <div class="calculator-layout">
+      <form class="calculator-form" id="price-calculator" novalidate>
+        <fieldset class="calculator-fieldset">
+          <legend>Тип объекта</legend>
+          <div class="calculator-options calculator-options-three">
+            <label class="calculator-option">
+              <input type="radio" name="propertyType" value="apartment" checked />
+              <span>Квартира</span>
+            </label>
+            <label class="calculator-option">
+              <input type="radio" name="propertyType" value="house" />
+              <span>Дом</span>
+            </label>
+            <label class="calculator-option">
+              <input type="radio" name="propertyType" value="office" />
+              <span>Офис</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="calculator-fieldset">
+          <legend>Вид уборки</legend>
+          <div class="calculator-options calculator-options-three">
+            <label class="calculator-option">
+              <input type="radio" name="cleaningType" value="regular" checked />
+              <span>Регулярная</span>
+            </label>
+            <label class="calculator-option">
+              <input type="radio" name="cleaningType" value="general" />
+              <span>Генеральная</span>
+            </label>
+            <label class="calculator-option">
+              <input type="radio" name="cleaningType" value="post-renovation" />
+              <span>После ремонта</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="calculator-area">
+          <label for="calculator-area">Площадь</label>
+          <div class="calculator-area-control">
+            <input
+              id="calculator-area"
+              name="area"
+              type="number"
+              min="20"
+              max="500"
+              step="1"
+              inputmode="numeric"
+              aria-describedby="calculator-area-hint calculator-area-error"
+              placeholder="Например, 60"
+            />
+            <span aria-hidden="true">м²</span>
+          </div>
+          <p class="calculator-area-hint" id="calculator-area-hint">От 20 до 500 м²</p>
+          <p class="calculator-error" id="calculator-area-error" role="alert" hidden></p>
+        </div>
+
+        <fieldset class="calculator-fieldset">
+          <legend>Формат работы</legend>
+          <div class="calculator-options">
+            <label class="calculator-option">
+              <input type="radio" name="frequency" value="one-time" checked />
+              <span>Разовая уборка</span>
+            </label>
+            <label class="calculator-option">
+              <input type="radio" name="frequency" value="recurring" />
+              <span>Регулярная уборка · скидка 10%</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="calculator-fieldset">
+          <legend>Дополнительные задачи</legend>
+          <div class="calculator-add-ons">
+            <label class="calculator-check">
+              <input type="checkbox" name="addOns" value="windows" />
+              <span>Мойка окон</span>
+            </label>
+            <label class="calculator-check">
+              <input type="checkbox" name="addOns" value="oven" />
+              <span>Внутри духовки</span>
+            </label>
+            <label class="calculator-check">
+              <input type="checkbox" name="addOns" value="fridge" />
+              <span>Внутри холодильника</span>
+            </label>
+          </div>
+        </fieldset>
+      </form>
+
+      <aside class="calculator-result" aria-labelledby="calculator-result-title">
+        <p class="calculator-result-label" id="calculator-result-title">Предварительная стоимость</p>
+        <p class="calculator-result-value" id="calculator-result-value" aria-live="polite">
+          Укажите площадь, чтобы рассчитать стоимость
+        </p>
+        <p class="calculator-result-summary" id="calculator-result-summary" hidden></p>
+        <a class="button button-light calculator-cta" id="calculator-cta" href="#quote" hidden>Оставить заявку</a>
+        <p class="calculator-disclosure">Демонстрационная ценовая модель</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { calculatePrice, PRICING, type AddOn, type CleaningType, type Frequency, type PropertyType } from "../lib/pricing";
+
+  const form = document.querySelector<HTMLFormElement>("#price-calculator");
+  const areaInput = document.querySelector<HTMLInputElement>("#calculator-area");
+  const areaError = document.querySelector<HTMLParagraphElement>("#calculator-area-error");
+  const resultValue = document.querySelector<HTMLParagraphElement>("#calculator-result-value");
+  const resultSummary = document.querySelector<HTMLParagraphElement>("#calculator-result-summary");
+  const resultCta = document.querySelector<HTMLAnchorElement>("#calculator-cta");
+
+  const propertyLabels: Record<PropertyType, string> = {
+    apartment: "Квартира",
+    house: "Дом",
+    office: "Офис",
+  };
+  const cleaningLabels: Record<CleaningType, string> = {
+    regular: "Регулярная",
+    general: "Генеральная",
+    "post-renovation": "После ремонта",
+  };
+
+  function setEmptyState(): void {
+    if (!resultValue || !resultSummary || !resultCta || !areaError || !areaInput) return;
+
+    resultValue.textContent = "Укажите площадь, чтобы рассчитать стоимость";
+    resultSummary.hidden = true;
+    resultCta.hidden = true;
+    areaError.textContent = "";
+    areaError.hidden = true;
+    areaInput.removeAttribute("aria-invalid");
+  }
+
+  function renderCalculation(): void {
+    if (!form || !areaInput || !areaError || !resultValue || !resultSummary || !resultCta) return;
+
+    const isEmpty = areaInput.value === "" && !areaInput.validity.badInput;
+    if (isEmpty) {
+      setEmptyState();
+      return;
+    }
+
+    const propertyType = form.querySelector<HTMLInputElement>('input[name="propertyType"]:checked')?.value as PropertyType;
+    const cleaningType = form.querySelector<HTMLInputElement>('input[name="cleaningType"]:checked')?.value as CleaningType;
+    const frequency = form.querySelector<HTMLInputElement>('input[name="frequency"]:checked')?.value as Frequency;
+    const addOns = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="addOns"]:checked'))
+      .map((input) => input.value as AddOn);
+    const result = calculatePrice({
+      propertyType,
+      cleaningType,
+      frequency,
+      addOns,
+      area: areaInput.valueAsNumber,
+    });
+
+    if (!result.ok) {
+      const errorMessage = result.error === "area-out-of-range"
+        ? `Введите площадь от ${PRICING.area.minimum} до ${PRICING.area.maximum} м².`
+        : `Введите площадь числом от ${PRICING.area.minimum} до ${PRICING.area.maximum} м².`;
+
+      resultValue.textContent = errorMessage;
+      resultSummary.hidden = true;
+      resultCta.hidden = true;
+      areaError.textContent = errorMessage;
+      areaError.hidden = false;
+      areaInput.setAttribute("aria-invalid", "true");
+      return;
+    }
+
+    const formattedPrice = new Intl.NumberFormat("ru-RU").format(result.price);
+    resultValue.textContent = `≈ ${formattedPrice} ₽`;
+    resultSummary.textContent = `${areaInput.value} м² · ${cleaningLabels[cleaningType]} · ${propertyLabels[propertyType]}`;
+    resultSummary.hidden = false;
+    resultCta.hidden = false;
+    areaError.hidden = true;
+    areaInput.removeAttribute("aria-invalid");
+  }
+
+  form?.addEventListener("input", renderCalculation);
+  form?.addEventListener("change", renderCalculation);
+  form?.addEventListener("submit", (event) => event.preventDefault());
+</script>
