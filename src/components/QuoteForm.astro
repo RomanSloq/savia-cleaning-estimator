@@ -13,19 +13,24 @@
 
     <div class="field">
       <label for="name">Как к вам обращаться</label>
-      <input id="name" name="name" type="text" autocomplete="name" aria-describedby="name-error" required />
+      <input id="name" name="name" type="text" autocomplete="name" maxlength="100" aria-describedby="name-error" required />
       <p class="field-error" id="name-error" hidden></p>
     </div>
 
     <div class="field">
       <label for="contact">Телефон или Telegram</label>
-      <input id="contact" name="contact" type="text" autocomplete="tel" inputmode="tel" placeholder="+7 … или @username" aria-describedby="contact-error" required />
+      <input id="contact" name="contact" type="text" autocomplete="tel" inputmode="tel" maxlength="160" placeholder="+7 … или @username" aria-describedby="contact-error" required />
       <p class="field-error" id="contact-error" hidden></p>
     </div>
 
     <div class="field field-full">
       <label for="comment">Комментарий <span class="field-optional">Необязательно</span></label>
-      <textarea id="comment" name="comment" rows="4" placeholder="Расскажите о важных деталях объекта"></textarea>
+      <textarea id="comment" name="comment" rows="4" maxlength="1000" placeholder="Расскажите о важных деталях объекта"></textarea>
+    </div>
+
+    <div class="form-honeypot" aria-hidden="true">
+      <label for="website">Сайт</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
     </div>
   </div>
 
@@ -34,8 +39,8 @@
     <button class="button" type="submit">Отправить запрос</button>
   </div>
 
-  <noscript>Для проверки демоформы включите JavaScript. Отправка данных не подключена.</noscript>
-  <p class="form-status" id="form-status" role="status" tabindex="-1" hidden></p>
+  <noscript>Для отправки заявки включите JavaScript.</noscript>
+  <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
 </form>
 
 <script>
@@ -46,12 +51,16 @@
   const nameInput = document.querySelector<HTMLInputElement>("#name");
   const contactInput = document.querySelector<HTMLInputElement>("#contact");
   const commentInput = document.querySelector<HTMLTextAreaElement>("#comment");
+  const websiteInput = document.querySelector<HTMLInputElement>("#website");
   const nameError = document.querySelector<HTMLParagraphElement>("#name-error");
   const contactError = document.querySelector<HTMLParagraphElement>("#contact-error");
   const estimatePanel = document.querySelector<HTMLElement>("#form-estimate");
   const estimatePrice = document.querySelector<HTMLElement>("#form-estimate-price");
   const estimateSummary = document.querySelector<HTMLElement>("#form-estimate-summary");
   const status = document.querySelector<HTMLParagraphElement>("#form-status");
+  const submitButton = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const submitLabel = submitButton?.textContent ?? "Отправить запрос";
+  let isSubmitting = false;
 
   const propertyLabels = { apartment: "Квартира", house: "Дом", office: "Офис" } as const;
   const cleaningLabels = { regular: "Стандартная", general: "Генеральная", "post-renovation": "После ремонта" } as const;
@@ -105,8 +114,10 @@
   });
   renderEstimate(getCurrentEstimate());
 
-  form?.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
+
     if (!validateForm()) {
       form.querySelector<HTMLInputElement>("[aria-invalid=\"true\"]")?.focus();
       return;
@@ -119,11 +130,35 @@
       estimate: getCurrentEstimate(),
     });
 
-    void payload;
+    isSubmitting = true;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Отправляем…";
+    }
     if (status) {
       status.hidden = false;
-      status.textContent = "Заявка не отправлена: приём данных ещё не подключён.";
-      status.focus();
+      status.textContent = "Отправляем заявку…";
+    }
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...payload, website: websiteInput?.value ?? "" }),
+      });
+
+      const result: unknown = await response.json();
+      const delivered = typeof result === "object" && result !== null && "ok" in result && result.ok === true;
+      if (!response.ok || !delivered) throw new Error("Lead delivery failed");
+      if (status) status.textContent = "Заявка отправлена. Свяжемся с вами, чтобы уточнить детали.";
+    } catch {
+      if (status) status.textContent = "Не удалось отправить заявку. Попробуйте ещё раз.";
+    } finally {
+      isSubmitting = false;
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitLabel;
+      }
     }
   });
 </script>

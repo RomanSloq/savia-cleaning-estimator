@@ -1200,6 +1200,15 @@ h3 {
   width: 100%;
 }
 
+.form-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .form-status {
   margin: 1rem 0 0;
   padding: 0.85rem 1rem;

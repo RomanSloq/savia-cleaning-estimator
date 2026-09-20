@@ -1,7 +1,11 @@
 node_modules/
 dist/
+.vercel/
 .astro/
 .pnpm-store/
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
 .codex/hooks.json
