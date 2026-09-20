@@ -26,11 +26,11 @@
         </fieldset>
 
         <fieldset class="calculator-fieldset">
-          <legend>Вид уборки</legend>
+          <legend>Тип уборки</legend>
           <div class="calculator-options calculator-options-three">
             <label class="calculator-option">
               <input type="radio" name="cleaningType" value="regular" checked />
-              <span>Регулярная</span>
+              <span>Стандартная</span>
             </label>
             <label class="calculator-option">
               <input type="radio" name="cleaningType" value="general" />
@@ -64,36 +64,36 @@
         </div>
 
         <fieldset class="calculator-fieldset">
-          <legend>Формат работы</legend>
+          <legend>Как часто нужна уборка?</legend>
           <div class="calculator-options">
             <label class="calculator-option">
               <input type="radio" name="frequency" value="one-time" checked />
-              <span>Разовая уборка</span>
+              <span>Разово</span>
             </label>
             <label class="calculator-option">
               <input type="radio" name="frequency" value="recurring" />
-              <span>Регулярная уборка · скидка 10%</span>
+              <span>Регулярно · скидка 10%</span>
             </label>
           </div>
         </fieldset>
 
-        <fieldset class="calculator-fieldset">
-          <legend>Дополнительные задачи</legend>
-          <div class="calculator-add-ons">
+        <details class="calculator-add-ons">
+          <summary>Дополнительные услуги</summary>
+          <div class="calculator-add-ons-list">
             <label class="calculator-check">
               <input type="checkbox" name="addOns" value="windows" />
               <span>Мойка окон</span>
             </label>
             <label class="calculator-check">
               <input type="checkbox" name="addOns" value="oven" />
-              <span>Внутри духовки</span>
+              <span>Чистка духовки</span>
             </label>
             <label class="calculator-check">
               <input type="checkbox" name="addOns" value="fridge" />
-              <span>Внутри холодильника</span>
+              <span>Чистка холодильника</span>
             </label>
           </div>
-        </fieldset>
+        </details>
       </form>
 
       <aside class="calculator-result" aria-labelledby="calculator-result-title">
@@ -103,13 +103,13 @@
         </p>
         <p class="calculator-result-summary" id="calculator-result-summary" hidden></p>
         <a class="button button-light calculator-cta" id="calculator-cta" href="#quote" hidden>Оставить заявку</a>
-        <p class="calculator-disclosure">Демонстрационная ценовая модель</p>
       </aside>
     </div>
   </div>
 </section>
 
 <script>
+  import { setCurrentEstimate } from "../lib/estimate-state";
   import { calculatePrice, PRICING, type AddOn, type CleaningType, type Frequency, type PropertyType } from "../lib/pricing";
 
   const form = document.querySelector<HTMLFormElement>("#price-calculator");
@@ -125,7 +125,7 @@
     office: "Офис",
   };
   const cleaningLabels: Record<CleaningType, string> = {
-    regular: "Регулярная",
+    regular: "Стандартная",
     general: "Генеральная",
     "post-renovation": "После ремонта",
   };
@@ -139,6 +139,7 @@
     areaError.textContent = "";
     areaError.hidden = true;
     areaInput.removeAttribute("aria-invalid");
+    setCurrentEstimate(undefined);
   }
 
   function renderCalculation(): void {
@@ -174,6 +175,7 @@
       areaError.textContent = errorMessage;
       areaError.hidden = false;
       areaInput.setAttribute("aria-invalid", "true");
+      setCurrentEstimate(undefined);
       return;
     }
 
@@ -184,6 +186,14 @@
     resultCta.hidden = false;
     areaError.hidden = true;
     areaInput.removeAttribute("aria-invalid");
+    setCurrentEstimate({
+      propertyType,
+      cleaningType,
+      frequency,
+      addOns,
+      area: areaInput.valueAsNumber,
+      price: result.price,
+    });
   }
 
   form?.addEventListener("input", renderCalculation);

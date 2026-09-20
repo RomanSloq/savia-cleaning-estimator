@@ -1,118 +1,37 @@
-<form class="quote-form" id="quote-form" aria-describedby="form-demo-note" novalidate>
-  <p class="form-demo-note" id="form-demo-note">Демонстрационная форма: данные никуда не отправляются. Не вводите реальные персональные данные.</p>
-  <p class="form-guidance">Заполните то, что уже знаете. Все поля в демоверсии необязательные.</p>
-  <div class="form-step">
+<form class="quote-form" id="quote-form">
+  <aside class="form-estimate" id="form-estimate" aria-live="polite" hidden>
+    <p>Ваш расчёт</p>
+    <strong id="form-estimate-price"></strong>
+    <span id="form-estimate-summary"></span>
+  </aside>
+
+  <div class="form-step form-contact-step">
     <div class="form-step-heading">
       <span>01</span>
-      <h3>Что нужно убрать?</h3>
-    </div>
-
-    <fieldset class="field field-full">
-      <legend>Вы обращаетесь как</legend>
-      <div class="choice-row">
-        <label class="choice">
-          <input type="radio" name="customerType" value="private" />
-          <span>Частный клиент</span>
-        </label>
-        <label class="choice">
-          <input type="radio" name="customerType" value="business" />
-          <span>Организация</span>
-        </label>
-      </div>
-    </fieldset>
-
-    <div class="field">
-      <label for="property-type">Тип объекта</label>
-      <select id="property-type" name="propertyType">
-        <option value="">Выберите вариант</option>
-        <option>Квартира</option>
-        <option>Дом</option>
-        <option>Офис</option>
-        <option>Производственное помещение</option>
-        <option>Склад</option>
-        <option>Другое</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="cleaning-type">Вид уборки</label>
-      <select id="cleaning-type" name="cleaningType">
-        <option value="">Выберите вариант</option>
-        <option>Регулярная уборка</option>
-        <option>Ежедневная уборка</option>
-        <option>Генеральная уборка</option>
-        <option>После строительства или ремонта</option>
-        <option>Мойка окон</option>
-        <option>Пока не знаю</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="area">Примерная площадь, м²</label>
-      <input id="area" name="area" type="number" min="1" inputmode="numeric" placeholder="Например, 65" />
-    </div>
-
-    <fieldset class="field">
-      <legend>Как часто нужна уборка</legend>
-      <div class="choice-row choice-row-compact">
-        <label class="choice">
-          <input type="radio" name="frequency" value="once" />
-          <span>Разово</span>
-        </label>
-        <label class="choice">
-          <input type="radio" name="frequency" value="recurring" />
-          <span>Регулярно</span>
-        </label>
-      </div>
-    </fieldset>
-  </div>
-
-  <details class="form-details">
-    <summary><span>02</span> Что важно учесть? <small>Необязательно</small></summary>
-    <div class="form-step">
-
-    <label class="check field-full">
-      <input type="checkbox" name="windows" />
-      <span>
-        <strong>Нужна мойка окон</strong>
-        <small>Учтём её при обсуждении состава работ</small>
-      </span>
-    </label>
-
-    <div class="field">
-      <label for="preferred-date">Желаемая дата</label>
-      <input id="preferred-date" name="preferredDate" type="date" />
-    </div>
-
-    <div class="field field-full">
-      <label for="details">Дополнительные задачи и комментарий</label>
-      <textarea id="details" name="details" rows="4" placeholder="Расскажите о состоянии помещения или важных деталях"></textarea>
-    </div>
-    </div>
-  </details>
-
-  <div class="form-step">
-    <div class="form-step-heading">
-      <span>03</span>
       <h3>Как с вами связаться?</h3>
     </div>
 
     <div class="field">
       <label for="name">Как к вам обращаться</label>
-      <input id="name" name="name" type="text" autocomplete="name" />
+      <input id="name" name="name" type="text" autocomplete="name" aria-describedby="name-error" required />
+      <p class="field-error" id="name-error" hidden></p>
     </div>
 
     <div class="field">
-      <label for="phone">Телефон для связи</label>
-      <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7" />
+      <label for="contact">Телефон или Telegram</label>
+      <input id="contact" name="contact" type="text" autocomplete="tel" inputmode="tel" placeholder="+7 … или @username" aria-describedby="contact-error" required />
+      <p class="field-error" id="contact-error" hidden></p>
+    </div>
+
+    <div class="field field-full">
+      <label for="comment">Комментарий <span class="field-optional">Необязательно</span></label>
+      <textarea id="comment" name="comment" rows="4" placeholder="Расскажите о важных деталях объекта"></textarea>
     </div>
   </div>
 
   <div class="form-submit">
-    <p>
-      Стоимость зависит от площади, состояния помещения, состава работ и регулярности. Адрес на этом этапе не нужен.
-    </p>
-    <button class="button" type="submit" disabled>Получить индивидуальный расчёт</button>
+    <p>Адрес на этом этапе не нужен. Итоговую стоимость согласуем после уточнения деталей.</p>
+    <button class="button" type="submit">Отправить запрос</button>
   </div>
 
   <noscript>Для проверки демоформы включите JavaScript. Отправка данных не подключена.</noscript>
@@ -120,20 +39,91 @@
 </form>
 
 <script>
+  import { estimateChangeEvent, getCurrentEstimate } from "../lib/estimate-state";
+  import { createLeadPayload, type LeadEstimate } from "../lib/lead";
+
   const form = document.querySelector<HTMLFormElement>("#quote-form");
+  const nameInput = document.querySelector<HTMLInputElement>("#name");
+  const contactInput = document.querySelector<HTMLInputElement>("#contact");
+  const commentInput = document.querySelector<HTMLTextAreaElement>("#comment");
+  const nameError = document.querySelector<HTMLParagraphElement>("#name-error");
+  const contactError = document.querySelector<HTMLParagraphElement>("#contact-error");
+  const estimatePanel = document.querySelector<HTMLElement>("#form-estimate");
+  const estimatePrice = document.querySelector<HTMLElement>("#form-estimate-price");
+  const estimateSummary = document.querySelector<HTMLElement>("#form-estimate-summary");
   const status = document.querySelector<HTMLParagraphElement>("#form-status");
-  const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  const propertyLabels = { apartment: "Квартира", house: "Дом", office: "Офис" } as const;
+  const cleaningLabels = { regular: "Стандартная", general: "Генеральная", "post-renovation": "После ремонта" } as const;
+
+  function setFieldError(input: HTMLInputElement, error: HTMLParagraphElement | null, message: string): boolean {
+    input.setCustomValidity(message);
+    input.setAttribute("aria-invalid", String(Boolean(message)));
+    if (error) {
+      error.textContent = message;
+      error.hidden = !message;
+    }
+    return !message;
+  }
+
+  function validateForm(): boolean {
+    if (!nameInput || !contactInput) return false;
+
+    const nameIsValid = setFieldError(
+      nameInput,
+      nameError,
+      nameInput.value.trim() ? "" : "Укажите, как к вам обращаться.",
+    );
+    const contactIsValid = setFieldError(
+      contactInput,
+      contactError,
+      contactInput.value.trim() ? "" : "Укажите телефон или Telegram для связи.",
+    );
+
+    return nameIsValid && contactIsValid;
+  }
+
+  function renderEstimate(estimate: LeadEstimate | undefined): void {
+    if (!estimatePanel || !estimatePrice || !estimateSummary) return;
+
+    if (!estimate) {
+      estimatePrice.textContent = "";
+      estimateSummary.textContent = "";
+      estimatePanel.hidden = true;
+      return;
+    }
+
+    estimatePrice.textContent = `≈ ${new Intl.NumberFormat("ru-RU").format(estimate.price)} ₽`;
+    estimateSummary.textContent = `${estimate.area} м² · ${cleaningLabels[estimate.cleaningType]} · ${propertyLabels[estimate.propertyType]}`;
+    estimatePanel.hidden = false;
+  }
+
+  nameInput?.addEventListener("input", validateForm);
+  contactInput?.addEventListener("input", validateForm);
+  document.addEventListener(estimateChangeEvent, (event) => {
+    renderEstimate((event as CustomEvent<LeadEstimate | undefined>).detail);
+  });
+  renderEstimate(getCurrentEstimate());
 
   form?.addEventListener("submit", (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      form.querySelector<HTMLInputElement>("[aria-invalid=\"true\"]")?.focus();
+      return;
+    }
 
-    // Stage 1 only: never imply that a lead was delivered before a real handler exists.
+    const payload = createLeadPayload({
+      name: nameInput?.value ?? "",
+      contact: contactInput?.value ?? "",
+      comment: commentInput?.value ?? "",
+      estimate: getCurrentEstimate(),
+    });
+
+    void payload;
     if (status) {
       status.hidden = false;
-      status.textContent =
-        "Это демонстрационная версия: заявка не отправлена. Подключение формы будет отдельным этапом.";
+      status.textContent = "Заявка не отправлена: приём данных ещё не подключён.";
       status.focus();
     }
   });
-  if (submit) submit.disabled = false;
 </script>

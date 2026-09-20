@@ -20,11 +20,11 @@ const businessServices = [
 ];
 
 const processSteps = [
-  ["Заявка", "Вы рассказываете об объекте и нужном формате уборки."],
-  ["Обсуждение", "Уточняем состояние помещения, состав работ и важные детали."],
-  ["Расчёт", "Определяем объём и называем индивидуальную стоимость."],
-  ["Согласование", "Подбираем удобное время и команду под конкретную задачу."],
-  ["Уборка", "Выполняем согласованный объём и принимаем результат вместе с вами."],
+  ["Предварительный расчёт", "Выберите параметры и получите ориентир по стоимости."],
+  ["Заявка", "Оставьте контакт и при желании расскажите о задаче."],
+  ["Уточнение", "Уточним состояние помещения, состав работ и важные детали."],
+  ["Подтверждение", "Согласуем итоговую стоимость и удобное время."],
+  ["Уборка", "Выполним согласованный объём работ."],
 ];
 ---
 
@@ -47,8 +47,7 @@ const processSteps = [
         </div>
 
         <figure class="hero-visual">
-          <img src="/images/concepts/warm-living-room.png" width="1448" height="1086" alt="Светлая гостиная с диваном, растением и деревянным столиком — сгенерированный интерьерный концепт" fetchpriority="high" decoding="async" />
-          <figcaption class="visual-caption">Визуальный концепт · сгенерировано, не фотография выполненной работы</figcaption>
+          <img src="/images/concepts/warm-living-room.png" width="1448" height="1086" alt="Светлая гостиная с диваном, растением и деревянным столиком" fetchpriority="high" decoding="async" />
         </figure>
 
         <ul class="hero-facts" aria-label="Главное о работе">
@@ -92,7 +91,7 @@ const processSteps = [
         <div class="service-columns">
           <article class="service-group">
             <figure class="service-photo service-photo-home">
-              <img src="/images/concepts/bathroom.png" width="1448" height="1086" alt="Светлая ванная комната с душевой кабиной — сгенерированный концепт, не реальный объект клиента" loading="lazy" decoding="async" />
+              <img src="/images/concepts/bathroom.png" width="1448" height="1086" alt="Светлая ванная комната с душевой кабиной" loading="lazy" decoding="async" />
             </figure>
             <div class="service-content">
             <div class="service-meta">
@@ -108,7 +107,7 @@ const processSteps = [
 
           <article class="service-group">
             <figure class="service-photo service-photo-business">
-              <img src="/images/concepts/office.png" width="1448" height="1086" alt="Светлый офис с переговорным столом и растениями — сгенерированный концепт, не реальный объект клиента" loading="lazy" decoding="async" />
+              <img src="/images/concepts/office.png" width="1448" height="1086" alt="Светлый офис с переговорным столом и растениями" loading="lazy" decoding="async" />
             </figure>
             <div class="service-content">
             <div class="service-meta">
@@ -126,14 +125,26 @@ const processSteps = [
       </div>
     </section>
 
+    <section class="archive section" id="archive" aria-labelledby="archive-title">
+      <div class="container archive-grid">
+        <div class="archive-copy">
+
+          <h2 id="archive-title">Примеры работ</h2>
+          <p class="archive-copy-text">Несколько примеров того, как может выглядеть результат после уборки. Листайте галерею — здесь разные помещения и задачи.</p>
+        </div>
+
+        <ArchiveGallery />
+      </div>
+    </section>
+
     <section class="process section" id="process" aria-labelledby="process-title">
       <div class="container process-grid">
         <div class="process-intro">
-          <h2 id="process-title">Сначала уточняем задачу — затем называем стоимость</h2>
+          <h2 id="process-title">Сначала ориентир — итоговую стоимость подтверждаем после уточнения деталей</h2>
           <aside class="price-note">
-            <span>Как формируется стоимость</span>
+            <span>Как формируется итоговая стоимость</span>
             <p>
-              Стоимость рассчитывается индивидуально: она зависит от площади, состояния помещения, состава работ, регулярности и дополнительных задач.
+              Калькулятор покажет предварительный ориентир по площади, типу уборки и дополнительным услугам. Итоговую стоимость подтверждаем после уточнения состояния помещения, состава работ и важных деталей.
             </p>
           </aside>
         </div>
@@ -152,28 +163,21 @@ const processSteps = [
 
     <PriceCalculator />
 
-    <section class="archive section" id="archive" aria-labelledby="archive-title">
-      <div class="container archive-grid">
-        <div class="archive-copy">
-          <h2 id="archive-title">Примеры результата</h2>
-          <p class="archive-note">Временные изображения для визуального прототипа</p>
-        </div>
-
-        <ArchiveGallery />
-      </div>
-    </section>
-
     <section class="quote section" id="quote" aria-labelledby="quote-title">
       <div class="container quote-grid">
         <div class="quote-intro">
-          <h2 id="quote-title">Расскажите об объекте — подготовим индивидуальный расчёт</h2>
-          <p>
-            Несколько ориентиров помогут понять задачу до разговора. Можно пропустить то, что пока неизвестно: адрес на первом шаге не нужен.
-          </p>
+          <h2 id="quote-title">Оставьте контакты — уточним детали</h2>
+          <p>Уточним особенности объекта и подтвердим итоговую стоимость.</p>
         </div>
         <QuoteForm />
       </div>
     </section>
+
+
+
+
+
+
 
     <section class="final-cta" id="contacts" aria-labelledby="final-title">
       <div class="container final-cta-inner">
@@ -197,5 +201,6 @@ const processSteps = [
       <p>Контактные данные готовятся к публикации после подтверждения.</p>
       <a href="#top">Наверх <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5m-6 6 6-6 6 6" /></svg></a>
     </div>
+    <p class="container portfolio-disclosure">Portfolio project · демонстрационная версия · цены и изображения используются в демонстрационных целях</p>
   </footer>
 </BaseLayout>

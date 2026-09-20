@@ -313,16 +313,7 @@ h3 {
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-.visual-caption {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 0.7rem 1rem;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-size: 0.78rem;
-  line-height: 1.4;
+  border-radius: inherit;
 }
 
 .hero-facts {
@@ -656,9 +647,12 @@ h3 {
 .calculator-area {
   min-width: 0;
   margin: 0;
-  padding: 1.4rem 0;
+  padding: 0;
   border: 0;
-  border-top: 1px solid var(--color-line);
+}
+
+.calculator-form > * + * {
+  margin-top: 1.5rem;
 }
 
 .calculator-fieldset legend,
@@ -757,6 +751,24 @@ h3 {
   font-weight: 600;
 }
 
+.calculator-add-ons {
+  padding: 0;
+}
+
+.calculator-add-ons summary {
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.calculator-add-ons[open] summary {
+  color: var(--color-forest);
+}
+
+.calculator-add-ons-list {
+  margin-top: 0.9rem;
+}
 .calculator-check {
   display: flex;
   align-items: flex-start;
@@ -768,7 +780,6 @@ h3 {
 .calculator-check + .calculator-check {
   margin-top: 0.6rem;
 }
-
 .calculator-check input {
   width: 1.2rem;
   height: 1.2rem;
@@ -819,12 +830,6 @@ h3 {
   display: none;
 }
 
-.calculator-disclosure {
-  margin: auto 0 0;
-  color: var(--color-forest-light);
-  font-size: 0.8rem;
-}
-
 .calculator-result :focus-visible {
   outline-color: var(--color-forest-light);
 }
@@ -842,13 +847,17 @@ h3 {
 
 .archive-copy {
   max-width: 34rem;
+  align-self: center;
 }
 
-.archive-note {
-  max-width: 34rem;
-  margin-top: 1rem;
+.archive-copy .eyebrow {
+  margin-bottom: 0.8rem;
+}
+
+.archive-copy-text {
+  max-width: 32rem;
+  margin-top: 1.25rem;
   color: var(--color-ink-soft);
-  font-size: 0.85rem;
 }
 
 .archive-gallery {
@@ -964,6 +973,37 @@ h3 {
   color: var(--color-ink-soft);
 }
 
+.form-estimate {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--color-sage);
+}
+
+.form-estimate[hidden] {
+  display: none;
+}
+
+.form-estimate p,
+.form-estimate strong,
+.form-estimate span {
+  margin: 0;
+}
+
+.form-estimate p,
+.form-estimate span {
+  color: var(--color-ink-soft);
+  font-size: 0.86rem;
+}
+
+.form-estimate strong {
+  color: var(--color-forest);
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 5cqi, 2.4rem);
+  line-height: 1.05;
+}
 .quote-form {
   width: 100%;
   max-width: 56rem;
@@ -1038,6 +1078,21 @@ h3 {
   resize: vertical;
 }
 
+.field-optional {
+  color: var(--color-ink-soft);
+  font-weight: 400;
+}
+
+.field-error {
+  margin: 0.45rem 0 0;
+  color: #8a2e20;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.field-error[hidden] {
+  display: none;
+}
 .field input::placeholder,
 .field textarea::placeholder {
   color: var(--color-ink-soft);
@@ -1145,15 +1200,6 @@ h3 {
   width: 100%;
 }
 
-.form-demo-note {
-  margin: 0 0 1rem;
-  padding: 1rem 1.25rem;
-  border-radius: var(--radius);
-  background: var(--color-sage);
-  color: var(--color-ink-soft);
-  font-size: 0.85rem;
-}
-
 .form-status {
   margin: 1rem 0 0;
   padding: 0.85rem 1rem;
@@ -1232,6 +1278,13 @@ h3 {
   gap: 0.5rem;
 }
 
+.portfolio-disclosure {
+  margin: 1.5rem auto 0;
+  color: var(--color-on-dark);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  opacity: 0.8;
+}
 @container quote-form (min-width: 30rem) {
   .choice-row {
     grid-template-columns: 1fr 1fr;
@@ -1288,7 +1341,38 @@ h3 {
     grid-template-columns: minmax(20rem, 0.8fr) minmax(35rem, 1.2fr);
   }
 
-  .quote-form {
+  .form-estimate {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--color-sage);
+}
+
+.form-estimate[hidden] {
+  display: none;
+}
+
+.form-estimate p,
+.form-estimate strong,
+.form-estimate span {
+  margin: 0;
+}
+
+.form-estimate p,
+.form-estimate span {
+  color: var(--color-ink-soft);
+  font-size: 0.86rem;
+}
+
+.form-estimate strong {
+  color: var(--color-forest);
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 5cqi, 2.4rem);
+  line-height: 1.05;
+}
+.quote-form {
     max-width: none;
   }
 }
@@ -1362,4 +1446,11 @@ input, textarea { caret-color: var(--color-forest); }
 .trust h2, .services h2, .final-cta h2 {
   font-family: var(--font-display);
   font-weight: 400;
+}
+
+/* Tablet: tighten final CTA top spacing */
+@media (min-width: 40rem) and (max-width: 55.999rem) {
+  .final-cta {
+    padding-top: calc(var(--section-space) * 0.72);
+  }
 }

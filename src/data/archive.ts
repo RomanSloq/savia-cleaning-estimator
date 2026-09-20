@@ -26,7 +26,7 @@ export const previewPhotos: PreviewPhoto[] = [
     height: 1086,
     scene: "Ванная",
     phase: "до уборки",
-    alt: "Сгенерированный концепт ванной до уборки: следы загрязнения на раковине и в душевой",
+    alt: "Ванная до уборки: следы загрязнения на раковине и в душевой",
   },
   {
     src: "/images/concepts/bathroom.png",
@@ -34,7 +34,7 @@ export const previewPhotos: PreviewPhoto[] = [
     height: 1086,
     scene: "Ванная",
     phase: "после уборки",
-    alt: "Сгенерированный концепт той же ванной после уборки: светлая раковина и душевая",
+    alt: "Ванная после уборки: светлая раковина и душевая",
   },
   {
     src: "/images/concepts/office-before.png",
@@ -42,7 +42,7 @@ export const previewPhotos: PreviewPhoto[] = [
     height: 1086,
     scene: "Переговорная",
     phase: "до уборки",
-    alt: "Сгенерированный концепт переговорной до уборки: загрязнение на столе, полу и окне",
+    alt: "Переговорная до уборки: загрязнение на столе, полу и окне",
   },
   {
     src: "/images/concepts/office.png",
@@ -50,7 +50,7 @@ export const previewPhotos: PreviewPhoto[] = [
     height: 1086,
     scene: "Переговорная",
     phase: "после уборки",
-    alt: "Сгенерированный концепт той же переговорной после уборки: чистый стол и пол",
+    alt: "Переговорная после уборки: чистый стол и пол",
   },
 ];
 

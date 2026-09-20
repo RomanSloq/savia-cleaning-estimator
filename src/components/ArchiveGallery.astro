@@ -2,7 +2,7 @@
 import { previewPhotos } from "../data/archive";
 ---
 
-<div class="archive-gallery" data-preview-gallery aria-label="Сгенерированные примеры до и после уборки">
+<div class="archive-gallery" data-preview-gallery aria-label="Примеры уборки">
   <div class="archive-slots" id="preview-slides">
     {previewPhotos.map((photo, index) => (
       <figure class:list={["archive-slot", { "is-active": index === 0 }]}>
