@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
-import vercel from "@astrojs/vercel";
+import deno from "@deno/astro-adapter";
 
 export default defineConfig({
-  adapter: vercel(),
+  output: "server",
+  adapter: deno(),
 });

@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
     "check": "astro check",
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/vercel": "^11.0.10",
+    "@deno/astro-adapter": "^0.6.0",
     "astro": "7.3.2"
   },
   "devDependencies": {
