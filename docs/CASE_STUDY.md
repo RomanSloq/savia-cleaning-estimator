@@ -1,75 +1,75 @@
-# Savia — Case Study
+# Savia — кейс проекта
 
-## Context
+## Контекст
 
-Savia began with a brief for a local cleaning business. The portfolio project keeps the useful product constraints from that setting—people need to understand the service, describe their task, and request an individual quote—without exposing the original business identity, contacts, or materials.
+Проект Savia вырос из брифа локального клинингового бизнеса. Портфолио-проект сохраняет полезные ограничения этой задачи: посетителю нужно понять услугу, описать задачу и запросить индивидуальный расчёт — без раскрытия исходной идентичности, контактов и материалов.
 
-## Problem
+## Проблема
 
-The first roadmap included a price calculator. Discovery showed that cleaning work is not reliably priced from a small set of public inputs: the final scope depends on the condition of the property, the requested work, and details found during clarification.
+В первоначальный план входил калькулятор стоимости. В ходе уточнения требований выяснилось, что уборку нельзя надёжно оценить по небольшому набору публичных параметров: итоговый объём зависит от состояния объекта, нужного вида работ и деталей, которые уточняются отдельно.
 
-## Product decision
+## Продуктовое решение
 
-The response was to split two use cases rather than compromise either one:
+Решение — разделить два сценария, не ухудшая ни один из них:
 
 ```text
-Real-business direction
-  → individual quote request
+Реальное бизнес-направление
+  → заявка на индивидуальный расчёт
 
-Portfolio edition
-  → deterministic demo estimator
+Портфолио-версия
+  → детерминированный демонстрационный калькулятор
 ```
 
-For the real-business direction, an individual quote request was more honest than a calculator that could imply a final price. The portfolio edition uses a deterministic estimator intentionally: it creates a bounded, testable interaction that demonstrates frontend state handling, TypeScript pricing logic, validation, and a complete lead path. The estimate is a starting point, not a promise of the final commercial price.
+Для реального бизнес-направления заявка на индивидуальный расчёт честнее, чем калькулятор, который может создать впечатление окончательной цены. В портфолио-версии детерминированный калькулятор добавлен намеренно: он показывает ограниченный и тестируемый интерактивный сценарий, логику интерфейса, расчёты на TypeScript, валидацию и полный путь заявки. Расчёт — отправная точка, а не обещание итоговой коммерческой стоимости.
 
-## What I built
+## Что реализовано
 
-- A responsive Russian-language landing page for desktop, tablet, and mobile
-- An estimator UI for property type, cleaning type, area, frequency, and add-ons
-- A separate TypeScript pricing engine
-- Automated tests for pricing, payloads, validation, endpoint behavior, and Telegram delivery
-- A lead form that can receive the current valid estimate
-- An on-demand server endpoint at `/api/lead`
-- Server-side input validation and estimate recalculation
-- Telegram delivery through a dedicated server adapter
+- адаптивный русскоязычный лендинг для ПК, планшета и телефона
+- интерфейс калькулятора для типа объекта, вида уборки, площади, регулярности и дополнительных услуг
+- отдельный TypeScript-движок расчёта стоимости
+- автоматические тесты для расчётов, данных заявки, валидации, API-маршрута и Telegram-доставки
+- форма заявки, принимающая актуальный валидный расчёт
+- серверный API-маршрут по адресу `/api/lead`
+- серверная валидация ввода и повторный расчёт стоимости
+- доставка в Telegram через отдельный серверный адаптер
 
-## Important implementation decisions
+## Ключевые технические решения
 
-### Pricing is separate from the UI
+### Цена отделена от UI
 
-`calculatePrice()` is the pricing source of truth. The calculator UI renders its result, while server validation calls the same function again instead of duplicating the formula.
+`calculatePrice()` — единственный источник истины для расчёта. Интерфейс отображает его результат, а серверная валидация повторно вызывает ту же функцию, не дублируя формулу.
 
-### The server verifies the browser estimate
+### Сервер проверяет расчёт из браузера
 
-The browser sends an estimate only as useful context for a lead. The server validates every estimate field, rejects malformed data, and recalculates the price before delivery. A client-provided number is never treated as authoritative.
+Браузер передаёт расчёт только как полезный контекст заявки. Сервер проверяет каждое поле, отклоняет некорректные данные и пересчитывает стоимость перед отправкой. Число, присланное клиентом, никогда не считается достоверным само по себе.
 
-### The lead model is transport-agnostic
+### Модель заявки не зависит от транспорта
 
-`LeadPayload` represents the request independently from its delivery channel. This keeps form collection separate from the current Telegram implementation and avoids coupling browser code to credentials or messaging details.
+`LeadPayload` описывает заявку независимо от канала доставки. Сбор данных формы отделён от текущей Telegram-реализации, а клиентский код не связан с секретами или деталями сообщений.
 
-### Telegram stays on the server
+### Telegram остаётся на сервере
 
-The route reads its configuration from server-side environment variables, then passes a verified lead to the Telegram adapter. Tokens and chat identifiers do not belong in the browser bundle.
+Маршрут читает конфигурацию из серверных переменных окружения и передаёт проверенную заявку Telegram-адаптеру. Токены и идентификаторы чата не попадают в клиентскую сборку.
 
-### Static-first architecture
+### Архитектура со статической основой
 
-Astro prerenders the landing page as static output. Only `/api/lead` opts into server execution, through the Vercel adapter. The page remains lightweight while the sensitive delivery step stays server-side.
+Astro предварительно генерирует лендинг как статический вывод. Только `/api/lead` переходит к серверному выполнению через адаптер Vercel. Страница остаётся лёгкой, а чувствительный шаг доставки выполняется на сервере.
 
-## QA
+## Проверка качества
 
-The completed project was checked through:
+Проект проверен следующим образом:
 
-- Visual review at desktop, tablet, and mobile widths
-- Accessibility review of semantics, labels, focus states, native controls, and live form feedback
-- Estimator edge cases: empty input, valid limits, invalid limits, cleared values, frequency, and add-on combinations
-- Estimate-to-form synchronization and stale-state clearing
-- 45 automated tests in 5 test files
-- A real Telegram end-to-end delivery check with local server configuration
-- Astro type checking and production builds
-- Verification that the landing page is prerendered and the lead route remains server-only
+- визуальная проверка на ПК, планшете и телефоне
+- проверка доступности: семантика, labels, состояния фокуса, нативные элементы управления и live-обратная связь формы
+- крайние состояния калькулятора: пустой ввод, допустимые и недопустимые значения, очистка, регулярность и комбинации дополнительных услуг
+- синхронизация расчёта с формой и очистка устаревшего состояния
+- 45 автоматических тестов в 5 файлах
+- реальная сквозная проверка доставки в Telegram с локальной серверной конфигурацией
+- проверка типов Astro и сборка для публикации
+- подтверждение, что лендинг предварительно генерируется, а маршрут заявки остаётся серверным
 
-## Result
+## Результат
 
-Savia demonstrates how product reasoning can shape implementation choices: it preserves individual quoting where that is the honest business flow, while using a deterministic estimator where it is useful for a portfolio demonstration.
+Savia показывает, как продуктовые решения влияют на реализацию: индивидуальный расчёт сохраняется как честный бизнес-сценарий, а детерминированный калькулятор используется там, где он полезен для портфолио-демонстрации.
 
-The finished project shows responsive UX/UI implementation, TypeScript business logic, automated testing, server-side API validation, and a server-side third-party integration—without claiming commercial results or real client work.
+Готовый проект демонстрирует адаптивную UX/UI-реализацию, бизнес-логику на TypeScript, автоматические тесты, серверную валидацию API и серверную интеграцию со сторонним сервисом — без заявлений о коммерческих результатах или реальных клиентах.
