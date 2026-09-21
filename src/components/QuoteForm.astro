@@ -150,6 +150,9 @@
       const result: unknown = await response.json();
       const delivered = typeof result === "object" && result !== null && "ok" in result && result.ok === true;
       if (!response.ok || !delivered) throw new Error("Lead delivery failed");
+      if (nameInput) nameInput.value = "";
+      if (contactInput) contactInput.value = "";
+      if (commentInput) commentInput.value = "";
       if (status) status.textContent = "Заявка отправлена. Свяжемся с вами, чтобы уточнить детали.";
     } catch {
       if (status) status.textContent = "Не удалось отправить заявку. Попробуйте ещё раз.";
