@@ -4,7 +4,13 @@ Savia is a responsive cleaning-service portfolio project built around a Russian-
 
 ## Preview
 
-Portfolio screenshots will be added before publication.
+![Savia landing page hero](screenshots/01-hero.png)
+
+![Savia services section](screenshots/02-services.png)
+
+![Cleaning estimator with a valid result](screenshots/03-estimator.png)
+
+![Lead form with the transferred estimate](screenshots/04-quote-flow.png)
 
 ## What it demonstrates
 
